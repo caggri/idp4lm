@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/common.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="page-container">
+    <h1 class="page-title">Configure</h1>
+    <div class="content-card">
+        <form id="deploymentForm">
+            <div class="deployment-list">
+                <div class="deployment-header">
+                    <div class="deployment-info-header">
+                        <span>Deployment</span>
+                    </div>
+                    <div class="replica-control-header">
+                        <span>Replicas</span>
+                    </div>
+                    <div class="service-control-header">
+                        <span>Service</span>
+                    </div>
+                </div>
+
+                <div class="deployment-item">
+                    <div class="deployment-info">
+                        <input type="checkbox" id="appDeployment" name="deployments" value="app"  {% if existing_deployments and "app" in existing_deployments %}checked{% endif %}>
+                        <label for="appDeployment">App Deployment</label>
+                    </div>
+                    <div class="replica-control">
+                        <input type="number" min="1" max="5" value="1" id="appReplicas" disabled>
+                    </div>
+                    <div class="service-control">
+                        <input type="checkbox" id="appServiceEnabled" {% if "app-service" in existing_services %}checked{% else %}disabled{% endif %}>
+                    </div>
+                </div>
+
+                <div class="deployment-item">
+                    <div class="deployment-info">
+                        <input type="checkbox" id="redisDeployment" name="deployments" value="redis" {% if existing_deployments and "redis" in existing_deployments %}checked{% endif %}>
+                        <label for="redisDeployment">Redis Deployment</label>
+                    </div>
+                    <div class="replica-control">
+                        <input type="number" min="1" max="2" value="1" id="redisReplicas" disabled>
+                    </div>
+                    <div class="service-control">
+                        <input type="checkbox" id="redisServiceEnabled" {% if "redis-service" in existing_services %}checked{% else %}disabled{% endif %}>
+                    </div>
+                </div>
+
+                <div class="deployment-item">
+                    <div class="deployment-info">
+                        <input type="checkbox" id="mysqlDeployment" name="deployments" value="mysql" {% if existing_deployments and "mysql" in existing_deployments %}checked{% endif %}>
+                        <label for="mysqlDeployment">MySQL Deployment</label>
+                    </div>
+                    <div class="replica-control">
+                        <input type="number" id="mysqlReplicas" min="1" max="2" value={{ existing_deployments["mysql"] if existing_deployments and "mysql" in existing_deployments else 1 }}  disabled>
+                    </div>
+                    <div class="service-control">
+                        <input type="checkbox" id="dbServiceEnabled" {% if "mysql-service" in existing_services %}checked{% else %}disabled{% endif %} >
+                    </div>
+                </div>
+            </div>
+
+            <div class="center-button">
+                <button type="button" id="createDeploymentBtn" class="nav-btn">
+                    <span>🚀</span> Create Deployments
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="/dashboard?ns={{ namespace }}" class="nav-btn">
+            <span>📊</span> Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', path='js/configure.js') }}"></script>
+{% endblock %}

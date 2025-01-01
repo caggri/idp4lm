@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="landing-body container">
+    <div class="input-container">
+        <h1 class="title">Create or Select Sandbox</h1>
+        <form id="namespaceForm">
+            <input 
+                type="text" 
+                id="namespaceInput"
+                class="namespace-input"
+                placeholder="Enter namespace name"
+                autocomplete="off"
+                required
+            >
+            <div id="errorMessage" class="error-message"></div>
+            <button type="submit" class="submit-button">Create Sandbox 📦</button>
+        </form>
+        
+        <div class="namespace-list">
+            <h2>Existing Sandboxes</h2>
+            <div id="namespacesList"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', path='js/landing.js') }}"></script>
+
+{% endblock %}

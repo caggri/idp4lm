@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/common.css') }}">
+{% endblock %}
+
+{% block javascript %}
+<script>
+async function deleteResource(type, name) {
+   
+    if (!confirm(`Are you sure you want to delete this ${type}?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/resources/${type}/${name}?ns={{ namespace }}`, {
+            method: 'DELETE'
+        });
+
+        if (type == "deployment") {
+            const response = await fetch(`/api/resources/service/${name.replace("deployment","service")}?ns={{ namespace }}`, {
+            method: 'DELETE'
+        });
+        }
+        
+        if (!response.ok) {
+            throw new Error('Failed to delete resource');
+        }
+        
+        window.location.reload();
+        
+    } catch (error) {
+        console.error('Error deleting resource:', error);
+        alert('Failed to delete resource. Please try again.');
+    }
+}
+
+async function openTerminal (pod) {
+    const url = `/terminal-page/{{namespace}}/${pod}`;
+    window.open(url, '_blank');
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h2 class="page-title">Dashboard</h2>
+    <div class="grid-container">
+        <div class="content-card">
+            <h2 class="card-title">Pods</h2>
+            {% if resources.pods %}
+                <div class="resource-list">
+                    {% for pod in resources.pods %}
+                    <div class="resource-item">
+                        <div class="resource-info">
+                            <span class="resource-name">{{ pod.name }}</span>
+                            <span class="status-badge {% if pod.ready %}ready{% else %}not-ready{% endif %}">
+                                {{ "Ready" if pod.ready else "Not Ready" }}
+                            </span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="delete-btn" onclick="deleteResource('pod', '{{ pod.name }}')">
+                                <span>🗑️</span>
+                            </button>
+                            <button class="delete-btn" onclick="openTerminal('{{ pod.name }}')">
+                                <span>🖥️</span>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-resources">No pods found</p>
+            {% endif %}
+        </div>
+
+        <!-- Services Card -->
+        <div class="content-card">
+            <h2 class="card-title">Services</h2>
+            {% if resources.services %}
+                <div class="resource-list">
+                    {% for service in resources.services %}
+                    <div class="resource-item">
+                        <span class="resource-name">{{ service }}</span>
+                        <div class="resource-actions">
+                            <button class="delete-btn" onclick="deleteResource('service', '{{ service }}')">
+                                <span>🗑️</span>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-resources">No services found</p>
+            {% endif %}
+        </div>
+
+        <!-- Deployments Card -->
+        <div class="content-card">
+            <h2 class="card-title">Deployments</h2>
+            {% if resources.deployments %}
+                <div class="resource-list">
+                    {% for deployment in resources.deployments %}
+                    <div class="resource-item">
+                        <div class="resource-info">
+                            <span class="resource-name">{{ deployment.name }}</span>
+                            <span class="status-badge {% if deployment.ready %}ready{% else %}not-ready{% endif %}">
+                                {{ "Ready" if deployment.ready else "Not Ready" }}
+                            </span>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="delete-btn" onclick="deleteResource('deployment', '{{ deployment.name }}')">
+                                <span>🗑️</span>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-resources">No deployments found</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="/configure?ns={{ namespace }}" class="nav-btn">
+            <span>⚙️</span> Configure
+        </a>
+    </div>
+</div>
+{% endblock %}
