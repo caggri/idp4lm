@@ -1,10 +1,8 @@
-{% extends "base.html" %}
+{{ define "css" }}
+<link rel="stylesheet" href="/static/css/landing.css">
+{{ end }}
 
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', path='css/landing.css') }}">
-{% endblock %}
-
-{% block content %}
+{{ define "content" }}
 <div class="landing-body container">
     <div class="input-container">
         <h1 class="title">Create or Select Sandbox</h1>
@@ -27,9 +25,8 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{{ end }}
 
-{% block javascript %}
-<script src="{{ url_for('static', path='js/landing.js') }}"></script>
-
-{% endblock %}
+{{ define "javascript" }}
+<script src="/static/js/landing.js"></script>
+{{ end }}
