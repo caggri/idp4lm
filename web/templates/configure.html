@@ -1,64 +1,55 @@
-{% extends "base.html" %}
+{{ define "css" }}
+<link rel="stylesheet" href="/static/css/common.css">
+{{ end }}
 
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', path='css/common.css') }}">
-{% endblock %}
-
-{% block content %}
-
+{{ define "content" }}
 <div class="page-container">
     <h1 class="page-title">Configure</h1>
     <div class="content-card">
         <form id="deploymentForm">
             <div class="deployment-list">
                 <div class="deployment-header">
-                    <div class="deployment-info-header">
-                        <span>Deployment</span>
-                    </div>
-                    <div class="replica-control-header">
-                        <span>Replicas</span>
-                    </div>
-                    <div class="service-control-header">
-                        <span>Service</span>
-                    </div>
+                    <div class="deployment-info-header"><span>Deployment</span></div>
+                    <div class="replica-control-header"><span>Replicas</span></div>
+                    <div class="service-control-header"><span>Service</span></div>
                 </div>
 
                 <div class="deployment-item">
                     <div class="deployment-info">
-                        <input type="checkbox" id="appDeployment" name="deployments" value="app"  {% if existing_deployments and "app" in existing_deployments %}checked{% endif %}>
+                        <input type="checkbox" id="appDeployment" name="deployments" value="app" {{ if .HasApp }}checked{{ end }}>
                         <label for="appDeployment">App Deployment</label>
                     </div>
                     <div class="replica-control">
                         <input type="number" min="1" max="5" value="1" id="appReplicas" disabled>
                     </div>
                     <div class="service-control">
-                        <input type="checkbox" id="appServiceEnabled" {% if "app-service" in existing_services %}checked{% else %}disabled{% endif %}>
+                        <input type="checkbox" id="appServiceEnabled" {{ if .HasAppSvc }}checked{{ else }}disabled{{ end }}>
                     </div>
                 </div>
 
                 <div class="deployment-item">
                     <div class="deployment-info">
-                        <input type="checkbox" id="redisDeployment" name="deployments" value="redis" {% if existing_deployments and "redis" in existing_deployments %}checked{% endif %}>
+                        <input type="checkbox" id="redisDeployment" name="deployments" value="redis" {{ if .HasRedis }}checked{{ end }}>
                         <label for="redisDeployment">Redis Deployment</label>
                     </div>
                     <div class="replica-control">
                         <input type="number" min="1" max="2" value="1" id="redisReplicas" disabled>
                     </div>
                     <div class="service-control">
-                        <input type="checkbox" id="redisServiceEnabled" {% if "redis-service" in existing_services %}checked{% else %}disabled{% endif %}>
+                        <input type="checkbox" id="redisServiceEnabled" {{ if .HasRedisSvc }}checked{{ else }}disabled{{ end }}>
                     </div>
                 </div>
 
                 <div class="deployment-item">
                     <div class="deployment-info">
-                        <input type="checkbox" id="mysqlDeployment" name="deployments" value="mysql" {% if existing_deployments and "mysql" in existing_deployments %}checked{% endif %}>
+                        <input type="checkbox" id="mysqlDeployment" name="deployments" value="mysql" {{ if .HasMysql }}checked{{ end }}>
                         <label for="mysqlDeployment">MySQL Deployment</label>
                     </div>
                     <div class="replica-control">
-                        <input type="number" id="mysqlReplicas" min="1" max="2" value={{ existing_deployments["mysql"] if existing_deployments and "mysql" in existing_deployments else 1 }}  disabled>
+                        <input type="number" id="mysqlReplicas" min="1" max="2" value="{{ if .HasMysql }}{{ .MysqlReplicas }}{{ else }}1{{ end }}" disabled>
                     </div>
                     <div class="service-control">
-                        <input type="checkbox" id="dbServiceEnabled" {% if "mysql-service" in existing_services %}checked{% else %}disabled{% endif %} >
+                        <input type="checkbox" id="dbServiceEnabled" {{ if .HasMysqlSvc }}checked{{ else }}disabled{{ end }} >
                     </div>
                 </div>
             </div>
@@ -72,13 +63,13 @@
     </div>
 
     <div class="nav-buttons">
-        <a href="/dashboard?ns={{ namespace }}" class="nav-btn">
+        <a href="/dashboard?ns={{ .Namespace }}" class="nav-btn">
             <span>📊</span> Dashboard
         </a>
     </div>
 </div>
-{% endblock %}
+{{ end }}
 
-{% block javascript %}
-<script src="{{ url_for('static', path='js/configure.js') }}"></script>
-{% endblock %}
+{{ define "javascript" }}
+<script src="/static/js/configure.js"></script>
+{{ end }}

@@ -1,0 +1,23 @@
+{{ define "base" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>K8s IDP</title>
+    {{ template "css" . }}
+    {{ template "javascript" . }}
+</head>
+<body>
+    <script src="/static/js/namespace.js"></script>
+    {{ if .Namespace }}
+    <div class="session-container">
+        <span class="active-workspace">Active Sandbox: {{ .Namespace }}</span>
+        <button class="end-session" onclick="NamespaceManager.endSession()">End Session</button>
+    </div>
+    {{ end }}
+    {{ template "content" . }}
+</body>
+</html>
+{{ end }}
+
+{{ define "css" }}{{ end }}
+{{ define "javascript" }}{{ end }}

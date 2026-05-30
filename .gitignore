@@ -10,7 +10,7 @@
 **/venv/**
 **/env/**
 **/__pycache__/**
-
+bin/
 
 ### Linux ###
 *~
