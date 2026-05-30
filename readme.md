@@ -1,7 +1,7 @@
 
 # IDP4LM
 
-**IDP4LM** (Identity Provider for Lightweight Management) is a web application aimed at providing an easy-to-use solution for creating Python development sandboxes using Kubernetes resources. This ongoing project was initiated during **Winter Fest**.
+**IDP4LM** (Internal Developer Platform LM) is a web application aimed at providing an easy-to-use solution for creating Python development sandboxes using Kubernetes resources. This ongoing project was initiated during **Winter Fest**.
 
 ## Features
 

@@ -4,6 +4,9 @@
 #py
 **/.venv/**
 **/.env/**
+
+# Local dev files
+*.local.*
 **/venv/**
 **/env/**
 **/__pycache__/**
