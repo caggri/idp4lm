@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"net/http"
 	"strings"
 
@@ -103,6 +104,9 @@ type wsReader struct {
 func (r *wsReader) Read(p []byte) (n int, err error) {
 	_, msg, err := r.ws.ReadMessage()
 	if err != nil {
+		if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+			return 0, io.EOF
+		}
 		return 0, err
 	}
 	n = copy(p, msg)
@@ -116,6 +120,9 @@ type wsWriter struct {
 func (w *wsWriter) Write(p []byte) (n int, err error) {
 	err = w.ws.WriteMessage(websocket.TextMessage, p)
 	if err != nil {
+		if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+			return 0, io.EOF
+		}
 		return 0, err
 	}
 	return len(p), nil
